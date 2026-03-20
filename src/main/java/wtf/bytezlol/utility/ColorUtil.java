@@ -9,6 +9,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @UtilityClass
+
+// Is a bit messy but does its job
 public final class ColorUtil {
 
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
