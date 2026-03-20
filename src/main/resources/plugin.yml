@@ -1,0 +1,10 @@
+name: ChatFormat
+version: '1.0.0'
+main: wtf.bytezlol.Main
+api-version: '1.21'
+authors: [ bytezlol ]
+website: www.github.com/bytezlol
+depend: [ LuckPerms ]
+softdepend: [ PlaceholderAPI ]
+commands:
+  chatformat:

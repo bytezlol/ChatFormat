@@ -1,0 +1,18 @@
+[versions]
+paper-api = "1.21-R0.1-SNAPSHOT"
+lombok = "1.18.42"
+shadow = "8.3.0"
+run-paper = "2.3.0"
+placeholderapi = "2.12.2"
+vault = "1.7.1"
+luckperms = "5.4"
+
+[libraries]
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+luckperms = { module = "net.luckperms:api", version.ref = "luckperms" }
+placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
+
+[plugins]
+run-paper = { id = "xyz.jpenilla.run-paper", version.ref = "run-paper" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

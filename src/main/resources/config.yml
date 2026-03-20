@@ -1,0 +1,9 @@
+# Chat format config
+# Available placeholders:
+#   {prefix}     - LuckPerms prefix
+#   {suffix}     - LuckPerms suffix
+#   {name}       - player name
+#   {message}    - chat message
+#   Any PlaceholderAPI placeholder e.g. %player_health%
+
+format: "{prefix}{name} <gray>▶ <white>{message}"
