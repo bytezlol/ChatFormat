@@ -17,6 +17,10 @@ public final class FormatCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final String @NotNull [] args) {
         if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+            if (!sender.hasPermission("chatformat.reload")) {
+                sender.sendMessage(ColorUtil.parse("&cYou don't have permission to do that."));
+                return true;
+            }
             Main.getInstance().loadConfigValues();
             sender.sendMessage(ColorUtil.parse("&aThe config file has been reloaded."));
             return true;
@@ -28,7 +32,7 @@ public final class FormatCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String alias, final String @NotNull [] args) {
-        if (args.length == 1) return List.of("reload");
+        if (args.length == 1 && sender.hasPermission("chatformat.reload")) return List.of("reload");
         return List.of();
     }
 }
