@@ -47,11 +47,13 @@ Every color format is supported and can be freely mixed in both the config forma
 
 ## Permissions
 
-| Permission | Description | Default |
-|---|---|---|
-| `chatformat.admin` | Access to `/chatformat reload` | op |
-| `chatformat.colorcodes` | Allow `&` color codes in chat messages | false |
-| `chatformat.rgbcodes` | Allow hex color codes in chat messages | false |
+| Permission              | Description                            | Default |
+|-------------------------|----------------------------------------|---------|
+| `chatformat.admin`      | Access to `/chatformat reload`         | op      |
+| `chatformat.colorcodes` | Allow `&` color codes in chat messages | false   |
+| `chatformat.rgbcodes`   | Allow hex color codes in chat messages | false   |
+| `chatformat.reload`     | Permission to reload the config file   | op      |
+
 
 ## Commands
 
