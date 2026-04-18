@@ -1,84 +1,79 @@
 package wtf.bytezlol.utility;
 
-import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@UtilityClass
+@SuppressWarnings("unused")
+public class ColorUtil {
 
-// Is a bit messy but does its job
-public final class ColorUtil {
+    private static final Pattern HEX_PATTERN =
+            Pattern.compile("(?:&#|#|<#)([0-9A-Fa-f]{6})>?");
 
-    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+    private static final Pattern LEGACY_PATTERN =
+            Pattern.compile("[§&]([0-9a-fk-orA-FK-OR])");
 
-    private static final LegacyComponentSerializer SECTION  = LegacyComponentSerializer.legacySection();
-    private static final LegacyComponentSerializer AMPERSAND = LegacyComponentSerializer.legacyAmpersand();
-    private static final Pattern HEX_AMPERSAND = Pattern.compile("&#([A-Fa-f0-9]{6})");
-    private static final Pattern HEX_BUKKIT    = Pattern.compile("&x(&[A-Fa-f0-9]){6}");
+    private static final Pattern URL_PATTERN =
+            Pattern.compile("(?<!['\"])(?:https?://)?([a-zA-Z0-9\\-]+\\.[a-zA-Z]{2,})(/[^\\s<>\"']*)?(\\s|$)");
 
-    public static String toMiniMessage(String input) {
-        if (input == null) return "";
+    private static final char[] LEGACY_CHARS = "0123456789abcdefklmnor".toCharArray();
+    private static final String[] MINI_TAGS = {
+            "<black>", "<dark_blue>", "<dark_green>", "<dark_aqua>",
+            "<dark_red>", "<dark_purple>", "<gold>", "<gray>",
+            "<dark_gray>", "<blue>", "<green>", "<aqua>",
+            "<red>", "<light_purple>", "<yellow>", "<white>",
+            "<obf>", "<b>", "<st>", "<u>", "<i>", "<reset>"
+    };
 
-        input = convertAmpersandHex(input);
-        input = convertBukkitHex(input);
-        input = input.replace('&', '§');
-        input = normalizeLegacySegments(input);
+    private static String translate(final String input) {
+        if (input == null) return null;
 
-        return input;
+        String result = input;
+
+        final Matcher hexMatcher = HEX_PATTERN.matcher(result);
+        final StringBuilder hexBuilder = new StringBuilder();
+
+        while (hexMatcher.find()) {
+            hexMatcher.appendReplacement(hexBuilder, "<#" + hexMatcher.group(1) + ">");
+        }
+        hexMatcher.appendTail(hexBuilder);
+        result = hexBuilder.toString();
+
+        final Matcher legacyMatcher = LEGACY_PATTERN.matcher(result);
+        final StringBuilder legacyBuilder = new StringBuilder();
+        while (legacyMatcher.find()) {
+            final char code = Character.toLowerCase(legacyMatcher.group(1).charAt(0));
+            final int index = new String(LEGACY_CHARS).indexOf(code);
+            if (index >= 0 && index < MINI_TAGS.length) {
+                legacyMatcher.appendReplacement(legacyBuilder,
+                        Matcher.quoteReplacement(MINI_TAGS[index]));
+            } else {
+                legacyMatcher.appendReplacement(legacyBuilder, "");
+            }
+        }
+        legacyMatcher.appendTail(legacyBuilder);
+        result = legacyBuilder.toString();
+
+        final Matcher urlMatcher = URL_PATTERN.matcher(result);
+        final StringBuilder urlBuilder = new StringBuilder();
+        while (urlMatcher.find()) {
+            final String full = urlMatcher.group(0).stripTrailing();
+            final String url = full.startsWith("http") ? full : "https://" + full;
+            urlMatcher.appendReplacement(urlBuilder,
+                    Matcher.quoteReplacement("<click:open_url:'" + url + "'>" + full + "</click>") + (urlMatcher.group(3)));
+        }
+        urlMatcher.appendTail(urlBuilder);
+        result = urlBuilder.toString();
+
+        return result;
     }
 
     public static Component parse(final String input) {
-        return MINI_MESSAGE.deserialize(toMiniMessage(input));
-    }
-
-    private static String convertAmpersandHex(String input) {
-        final Matcher m = HEX_AMPERSAND.matcher(input);
-        final StringBuffer sb = new StringBuffer();
-        final char c = '§';
-        while (m.find()) {
-            final String hex = m.group(1);
-            m.appendReplacement(sb, c + "x"
-                    + c + hex.charAt(0) + c + hex.charAt(1)
-                    + c + hex.charAt(2) + c + hex.charAt(3)
-                    + c + hex.charAt(4) + c + hex.charAt(5));
-        }
-        return m.appendTail(sb).toString();
-    }
-
-    private static String convertBukkitHex(String input) {
-        final Matcher m = HEX_BUKKIT.matcher(input);
-        final StringBuffer sb = new StringBuffer();
-        while (m.find()) {
-            m.appendReplacement(sb, Matcher.quoteReplacement(m.group().replace('&', '§')));
-        }
-        return m.appendTail(sb).toString();
-    }
-
-    private static String normalizeLegacySegments(final String input) {
-        final Pattern tagPattern = Pattern.compile("</?[a-zA-Z#0-9_:!][^>]*>");
-        final Matcher m = tagPattern.matcher(input);
-
-        final StringBuilder result = new StringBuilder();
-        int last = 0;
-
-        while (m.find()) {
-            final String before = input.substring(last, m.start());
-            result.append(legacyToMiniMessage(before));
-            result.append(m.group());
-            last = m.end();
-        }
-
-        result.append(legacyToMiniMessage(input.substring(last)));
-
-        return result.toString();
-    }
-
-    private static String legacyToMiniMessage(final String segment) {
-        if (segment.isEmpty() || !segment.contains("§")) return segment;
-        return MINI_MESSAGE.serialize(SECTION.deserialize(segment));
+        return MiniMessage.miniMessage()
+                .deserialize(translate(input))
+                .decoration(TextDecoration.ITALIC, false);
     }
 }

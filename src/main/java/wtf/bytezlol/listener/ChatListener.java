@@ -20,9 +20,9 @@ public final class ChatListener implements Listener {
         final Player player = event.getPlayer();
 
         final String format = FormatUtil.buildFormat(player);
-        final String processedMessage = FormatUtil.processMessage(player,
-                LegacyComponentSerializer.legacySection().serialize(event.message()));
+        final String processedMessage = FormatUtil.processMessage(player, LegacyComponentSerializer.legacySection().serialize(event.message()));
 
+        // TODO: add a hover event to rendered component for the stats stuff and config but I cba to do it rn
         final Component rendered = FormatUtil.render(format, processedMessage);
 
         event.renderer((source, sourceDisplayName, msg, audience) -> rendered);
