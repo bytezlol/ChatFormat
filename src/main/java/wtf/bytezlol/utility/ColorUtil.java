@@ -71,6 +71,10 @@ public class ColorUtil {
         return result;
     }
 
+    public static String toMiniMessage(final String input) {
+        return translate(input);
+    }
+
     public static Component parse(final String input) {
         return MiniMessage.miniMessage()
                 .deserialize(translate(input))

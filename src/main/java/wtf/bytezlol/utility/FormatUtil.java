@@ -11,8 +11,6 @@ import org.bukkit.entity.Player;
 
 public final class FormatUtil {
 
-    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
-
     private FormatUtil() {}
 
     public static String buildFormat(final Player player) {
@@ -42,7 +40,7 @@ public final class FormatUtil {
     }
 
     public static Component render(final String format, final String processedMessage) {
-        return MINI_MESSAGE.deserialize(format.replace("{message}", processedMessage));
+        return MiniMessage.miniMessage().deserialize(format.replace("{message}", processedMessage));
     }
 
     public static String processMessage(final Player player, final String message) {
