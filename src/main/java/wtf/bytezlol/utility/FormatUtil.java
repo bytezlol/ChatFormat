@@ -1,6 +1,6 @@
 package wtf.bytezlol.utility;
 
-import wtf.bytezlol.Main;
+import wtf.bytezlol.ChatFormat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -20,7 +20,7 @@ public final class FormatUtil {
         final String prefix = meta.getPrefix() != null ? ColorUtil.toMiniMessage(meta.getPrefix()) : "";
         final String suffix = meta.getSuffix() != null ? ColorUtil.toMiniMessage(meta.getSuffix()) : "";
 
-        String format = Main.getInstance().getFormat();
+        String format = ChatFormat.getInstance().getFormat();
         if (format == null) format = "{prefix}{name}: {message}";
 
         format = format

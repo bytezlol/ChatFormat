@@ -1,9 +1,19 @@
-# Chat format config
+# ============================================================================
+# ChatFormat Configuration
+# ============================================================================
 # Available placeholders:
-#   {prefix}     - LuckPerms prefix
-#   {suffix}     - LuckPerms suffix
-#   {name}       - player name
-#   {message}    - chat message
-#   Any PlaceholderAPI placeholder e.g. %player_health%
+#   {prefix}       — LuckPerms prefix
+#   {suffix}       — LuckPerms suffix
+#   {name}         — Player username
+#   {displayname}  — Player display name
+#   {world}        — Current world name
+#   {message}      — The chat message itself
+#   %papi_*%       — Any PlaceholderAPI placeholder
+#
+# Permissions:
+#   chatformat.colorcodes — allows §/& color codes in messages
+#   chatformat.rgbcodes   — allows hex (&#RRGGBB) codes in messages
+#   chatformat.admin      — /chatformat reload
+# ============================================================================
 
 format: "{prefix}{name} <gray>▶ <white>{message}"

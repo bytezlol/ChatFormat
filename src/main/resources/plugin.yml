@@ -1,6 +1,6 @@
 name: ChatFormat
 version: '1.0.0'
-main: wtf.bytezlol.Main
+main: wtf.bytezlol.ChatFormat
 api-version: '1.21'
 authors: [ bytezlol ]
 website: www.github.com/bytezlol
